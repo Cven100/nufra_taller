@@ -1,0 +1,47 @@
+{% extends 'shared/base.html' %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 text-end">
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary w-100">Agregar al Carro</button>
+                <div class="d-flex justify-content-between mt-3">
+                    <a href=# class="btn btn-secondary">Confrmar Compra</a>
+                </div>
+            </form> 
+        </div>
+
+        <div class="col-md-8">
+            <h3>Lo atiende: {{empleado}}</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Codigo</th>
+                        <th>Producto</th>
+                        <th>Precio Unitario</th>
+                        <th>Cantidad</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for producto in carrito %}
+                    <tr>
+                        <td>{{ producto.codigo }}</td>
+                        <td>{{ producto.nombre }}</td>
+                        <td>${{ producto.precio_unitario }}</td>
+                        <td>{{ producto.cantidad }}</td>
+                        <td>${{ producto.subtotal }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center">No hay productos en el carrito.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

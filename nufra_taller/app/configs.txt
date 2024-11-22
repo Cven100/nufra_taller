@@ -1,0 +1,33 @@
+    Creacion de roles:
+python manage.py shell
+
+from app.models import Roles
+
+Roles.objects.create(nombre="usuario")
+Roles.objects.create(nombre="admin")
+
+    Verificar los roles creados
+Roles.objects.all()
+
+
+    Primer admin:
+python manage.py shell
+
+from app.models import Usuario, Roles
+from django.contrib.auth.hashers import make_password
+
+rol_admin = Roles.objects.get(id=2)
+usuario_francisco = Usuario(
+    rut_usuario='10300100-2',
+    nombre='Francisco',
+    email='francisco@gmail.com',
+    password=make_password('1234'),
+    rol=rol_admin
+)
+usuario_francisco.save()
+
+
+-- EN CASO DE QUERE REINICIAR UNA TABLA
+SET FOREIGN_KEY_CHECKS = 0;  -- Deshabilitar las restricciones
+TRUNCATE TABLE nombre_tabla;  -- Truncar la tabla
+SET FOREIGN_KEY_CHECKS = 1;  -- Habilitar restricciones

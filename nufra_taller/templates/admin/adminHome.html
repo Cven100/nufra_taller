@@ -1,0 +1,45 @@
+{% extends 'shared/base.html' %}
+{% block content %}
+<body>
+    <div class="container mt-4">
+        <div class="row mt-5">
+            <div class="col-md-4 mb-4">
+                <div class="card text-center shadow">
+                    <div class="card-body">
+                        <h5 class="card-title">Gestion Tienda</h5>
+                        <p class="card-text">Gestion de productos y categorias.</p>
+                        <a href={% url "gestionTienda" %} class="btn btn-primary">Ir a Tienda</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card text-center shadow">
+                    <div class="card-body">
+                        <h5 class="card-title">Proveedores</h5>
+                        <p class="card-text">Gestion de Proveedores.</p>
+                        <a href={% url "proveedores" %} class="btn btn-primary">Ir a Proveedores</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card text-center shadow">
+                    <div class="card-body">
+                        <h5 class="card-title">Personal</h5>
+                        <p class="card-text">Gestion de personal.</p>
+                        <a href={% url "personal" %} class="btn btn-primary">Ir a Personal</a>
+                    </div>
+                </div>
+            </div>            
+            <div class="col-md-4 mb-4">
+                <div class="card text-center shadow">
+                    <div class="card-body">
+                        <h5 class="card-title">Reportes</h5>
+                        <p class="card-text">Reportes varios.</p>
+                        <a href={% url "reportes" %} class="btn btn-primary">Ir a Reportes</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+{% endblock %}
