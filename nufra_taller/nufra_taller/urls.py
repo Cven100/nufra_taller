@@ -32,40 +32,32 @@ urlpatterns = [
     # Admin
     path('adminHome', vistas.RenderAdminHome, name='adminHome'),
 
-    path('gestionTienda', vistas.RenderGestionTienda, name='gestionTienda'),
-    path('crearProductos', vistas.RenderCrearProductos, name='crearProductos'),
-    path('gestionProductos', vistas.RenderGestionProductos, name='gestionProductos'),
-    path('categorias', vistas.RenderCategorias, name='categorias'),
+    path('productos/', vistas.RenderGestionProductos, name='productos'),
+    path('productos/editar/<int:producto_codigo>/', vistas.RenderGestionProductos, name='editarProducto'),
+    path('productos/deshabilitar/<str:producto_codigo>/', vistas.DeshabilitarProducto, name='deshabilitarProducto'),
 
-    path('proveedores', vistas.RenderProveedores, name='proveedores'),
-    path('gestionProveedores', vistas.RenderGestionProveedores, name='gestionProveedores'),
-    path('crearProveedor', vistas.RenderCrearProveedor, name='crearProveedor'),
-    path('pedidos', vistas.RenderPedidos, name='pedidos'),
+    path('categorias', vistas.RenderGestionCategorias, name='categorias'),
+    path('categorias/editar/<int:categoria_id>/', vistas.RenderGestionCategorias, name='editarCategoria'),
+    path('categorias/deshabilitar/<int:categoria_id>/', vistas.DeshabilitarCategoria, name='deshabilitarCategoria'),
+
+
+
+    path('proveedores/', vistas.RenderGestionProveedores, name='proveedores'),
+    path('proveedores/editar/<int:proveedor_id>/', vistas.RenderGestionProveedores, name='editarProveedor'),
+    path('proveedores/deshabilitar/<int:proveedor_id>/', vistas.DeshabilitarProveedor, name='deshabilitarProveedor'),
+
+
+    path('crearPedido/<int:proveedor_id>/', vistas.RenderCrearPedido, name='crearPedido'),
+    path('eliminarProductoPedido/<int:codigo_producto>/<int:proveedor_id>/', vistas.EliminarProductoPedido, name='eliminarProductoPedido'),
+    path('confirmarPedido/', vistas.ConfirmarPedido, name='confirmarPedido'),
+
+
+
 
     path('personal', vistas.RenderPersonal, name='personal'),
     
     path('reportes', vistas.RenderReportes, name='reportes'),
 
-    #     #Proveedor
-    # path('home/admin/config/proveedores/', vistas.RenderProveedores, name='proveedores'),
-    # path('home/admin/config/add-proveedor/', vistas.AddProveedor, name='addProveedor'),
-    # path('home/admin/config/edit-proveedor/<int:id>/', vistas.EditProveedor, name='editProveedor'),
-    # #Block/Unblock Proveedor
-    # path('home/admin/config/block-proveedor/<int:id>/', vistas.BlockProveedor, name='blockProveedor'),
-    
-    #     #Producto
-    # path('home/admin/config/productos/', vistas.RenderProducto, name='productos'),
-    # path('home/admin/config/add-producto/', vistas.AddProducto, name='addProducto'),
-    # path('home/admin/config/edit-producto/<int:id>/', vistas.EditProducto, name='editProducto'),
-    # #Block/Unblock Producto
-    # path('home/admin/config/productos/block-producto/<int:id>/', vistas.BlockProducto, name='blockProducto'),
-
-    #     #Categorias
-    # path('home/admin/config/productos/categorias/', vistas.RenderCategorias, name='categorias'),
-    # path('home/admin/config/productos/categorias/edit-categoria/<int:id>/', vistas.EditCategoria, name='editCategoria'),
-    
-    # #Block/Unblock categoria
-    # path('home/admin/config/productos/categorias/block-categoria/<int:id>/', vistas.BlockCategoria, name='blockCategoria'),
 
     # # Supervisor
     path('superHome', vistas.RenderSuperHome, name='superHome'),
@@ -76,6 +68,10 @@ urlpatterns = [
     
     # # Vendedor
     path('venta/', vistas.RenderVenta, name='venta'),
+    path('confirmarVenta/', vistas.ConfirmarVenta, name='confirmarVenta'),
+    path('quitarProductoCarrito/<int:codigo>/', vistas.QuitarProductoCarrito, name='quitarProductoCarrito'),
+
+
 
 
    #  DOCUMENTACION

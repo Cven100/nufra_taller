@@ -131,7 +131,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 #SESSION
 
-SESSION_COOKIE_AGE = 1800  # Duración de la sesión en segundos
+SESSION_COOKIE_AGE = 180000  # Duración de la sesión en segundos
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # La sesión se cierra al cerrar el navegador
 
 LOGIN_URL = 'Login'  # Redirecciona a esta vista si no hay sesión

@@ -1,0 +1,70 @@
+{% extends 'shared/base.html' %}
+
+{% block content %}
+<div class="container" style="background-color: #4A4063; color: white; margin-top: 55px;">
+    <div class="card-header text-center">
+        <h4 class="mb-0">
+            {% if categoria %}Editar Categoria{% else %}Crear Categoria{% endif %}
+        </h4>
+    </div>
+        <div class="container mb-4">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-custom">
+                {% if categoria %}Actualizar Categoria{% else %}Guardar Categoria{% endif %}
+            </button>
+        </form>
+    </div>
+
+    <!-- Buscador de categorías -->
+    <div class="container mb-4">
+        <form method="get" class="my-3">
+            <div class="input-group">
+                <input type="text" name="search" class="form-control" placeholder="Buscar categoria por nombre" value="{{ query }}">
+                <button type="submit" class="btn btn-custom">Buscar</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Tabla de categorías -->
+    <div class="container">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Nombre de la Categoria</th>
+                    <th>Disponibilidad</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for categoria in categorias %}
+                    <tr>
+                        <td>{{ categoria.nombre }}</td>
+                        <td>
+                            {% if categoria.disponible %}
+                                <span class="badge bg-success">Disponible</span>
+                            {% else %}
+                                <span class="badge bg-danger">No Disponible</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'editarCategoria' categoria.id %}" class="btn btn-warning">Editar</a>
+                            {% if categoria.disponible %}
+                                <a href="{% url 'deshabilitarCategoria' categoria.id %}" class="btn btn-danger">Deshabilitar</a>
+                            {% else %}
+                                <a href="{% url 'deshabilitarCategoria' categoria.id %}" class="btn btn-success">Habilitar</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="3" class="text-center">No hay categorías creadas aún.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+{% endblock %}

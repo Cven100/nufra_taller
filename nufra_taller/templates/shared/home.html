@@ -1,5 +1,78 @@
-{% extends 'shared/base.html' %}
+<!DOCTYPE html>
+<html lang="es">
 
-{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
 
-{% endblock %}
+<body>
+
+    <!-- Fondo con gradiente y logo centrado -->
+    <div class="background">
+        <!-- Logo que ahora actúa como botón de login -->
+        <a href="{% if request.session.rol_id == "1" %}{% url 'adminHome' %}
+        {% elif request.session.rol_id == "2" %}{% url 'superHome' %}
+        {% elif request.session.rol_id == "3" %}{% url 'venta' %}
+        {% else %}{% url 'login' %}{% endif %}">
+        <img src="/static/images/Logo.png" alt="Logo" class="logo">
+        </a>
+
+
+
+        <!-- Botón de login en la esquina superior derecha (opcional si no necesitas el logo como botón) -->
+        <!-- Puedes quitar este bloque si ya no es necesario -->
+        {% if request.session.rut_empleado %}
+        <a href="{% url 'logout' %}" class="login-btn"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesion</a>
+        {% else %}
+        <a href="{% url 'login' %}" class="login-btn">Iniciar Sesión</a>
+        {% endif %}
+    </div>
+
+</body>
+
+</html>
+
+<style>
+    /* Estilo para ocupar toda la pantalla y tener un fondo agradable */
+    body, html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        font-family: Arial, sans-serif;
+    }
+
+    .background {
+        background: linear-gradient(to bottom right, #800080, #d7a8f6);
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+    }
+
+    /* Estilo para el logo centrado */
+    .logo {
+        cursor: pointer;
+        max-width: 100%;
+        height: auto;
+    }
+
+    /* Estilo para el botón de login en la esquina superior derecha */
+    .login-btn {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        padding: 10px 20px;
+        background-color: #ffffff;
+        color: #800080;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+    }
+
+    .login-btn:hover {
+        background-color: #d7a8f6;
+    }
+</style>

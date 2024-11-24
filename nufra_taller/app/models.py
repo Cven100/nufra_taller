@@ -110,19 +110,10 @@ class DetalleVenta(models.Model):
 
 
 class Pedido(models.Model):
-    nro_pedido = models.IntegerField(unique=True, primary_key=True)
+    nro_pedido = models.AutoField(unique=True, primary_key=True)
     fecha = models.DateField(auto_now_add=True)
-    precio_total = models.FloatField(default=0)
     proveedor = models.ForeignKey(Proveedor, on_delete=models.DO_NOTHING)
     total_pedido = models.FloatField()
-
-
-    def calcular_total(self):
-        total = 0 
-        for pedido in self.detallePedido.all():
-            subtotal = pedido.cantidad * pedido.precio_unitario 
-            total += subtotal 
-        return total
 
 
 class DetallePedido(models.Model):

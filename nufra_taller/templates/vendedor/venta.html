@@ -1,46 +1,84 @@
 {% extends 'shared/base.html' %}
+
 {% block content %}
-<div class="container">
+<div class="container mt-4"style="background-color: #4A4063; padding: 20px;">
     <div class="row">
-        <div class="col-md-4 text-end">
-            <form method="POST">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit" class="btn btn-primary w-100">Agregar al Carro</button>
-                <div class="d-flex justify-content-between mt-3">
-                    <a href=# class="btn btn-secondary">Confrmar Compra</a>
+        <!-- Columna de la izquierda para el formulario -->
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-header text-center">
+                    <h5>Agregar Producto</h5>
                 </div>
-            </form> 
+                <div class="card-body">
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-custom w-100">Agregar al Carro</button>
+                    </form>
+                </div>
+            </div>
         </div>
 
+        <!-- Columna de la derecha para mostrar el carrito -->
         <div class="col-md-8">
-            <h3>Lo atiende: {{empleado}}</h3>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Codigo</th>
-                        <th>Producto</th>
-                        <th>Precio Unitario</th>
-                        <th>Cantidad</th>
-                        <th>Subtotal</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for producto in carrito %}
-                    <tr>
-                        <td>{{ producto.codigo }}</td>
-                        <td>{{ producto.nombre }}</td>
-                        <td>${{ producto.precio_unitario }}</td>
-                        <td>{{ producto.cantidad }}</td>
-                        <td>${{ producto.subtotal }}</td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="5" class="text-center">No hay productos en el carrito.</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h5>Lo atiende {{ empleado }}</h5>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4>Total: ${{ total_compra }}</h4>
+                        <div>
+                            <form method="POST" action="{% url 'confirmarVenta' %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn" style="background-color: #4A4063; color: white;"
+                                    {% if carrito|length == 0 %}disabled{% endif %}>
+                                    Confirmar Venta
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Codigo</th>
+                                <th>Producto</th>
+                                <th>Precio Unitario</th>
+                                <th>Cantidad</th>
+                                <th>Subtotal</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for producto in carrito %}
+                            <tr>
+                                <td>{{ producto.codigo }}</td>
+                                <td>{{ producto.nombre }}</td>
+                                <td>${{ producto.precio_unitario }}</td>
+                                <td>{{ producto.cantidad }}</td>
+                                <td>${{ producto.subtotal }}</td>
+                                <td>
+                                    {% if rol_id == "1" or rol_id == "2" %}
+                                    <!-- Mostrar la acción de quitar producto -->
+                                    <form method="POST" action="{% url 'quitarProductoCarrito' producto.codigo %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger btn-sm">Quitar</button>
+                                    </form>
+                                {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" class="text-center">No hay productos en el carrito.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <!-- Total y Confirmación -->
+
+                </div>
+            </div>
         </div>
     </div>
 </div>

@@ -14,7 +14,8 @@ class RegisterForm(forms.ModelForm):
             'correo',
             'password',
             'rol',
-            "telefono"
+            "telefono",
+            "jefatura"
             ]
 
         widgets = {
@@ -24,6 +25,7 @@ class RegisterForm(forms.ModelForm):
             'username': forms.TextInput(attrs={'class': 'form-control'}),
             'password': forms.PasswordInput(attrs={'class': 'form-control'}),
             'telefono': forms.TextInput(attrs={'class': 'form-control'}),
+            "jefatura": forms.TextInput(attrs={'class': 'form-control'}),
             'correo': forms.EmailInput(attrs={'class': 'form-control'}),
             'rol': forms.Select(attrs={'class': 'form-control'}),
         }
@@ -50,19 +52,19 @@ class ProveedorForm(forms.ModelForm):
             'nombre',
             'correo',
             'telefono'
-            ]
-
+        ]
         widgets = {
-            'nombre' : forms.TextInput(attrs={'class': 'form-control'}),
-            'correo' : forms.TextInput(attrs={'class': 'form-control'}),
-            'telefono' : forms.NumberInput(attrs={'class': 'form-control'})
-            }
+            'nombre': forms.TextInput(attrs={'class': 'form-control'}),
+            'correo': forms.TextInput(attrs={'class': 'form-control'}),
+            'telefono': forms.NumberInput(attrs={'class': 'form-control'})
+        }
+
     def clean(self):
         cleaned_data = super().clean()
         nombre = cleaned_data.get('nombre')
 
-        # Validación de duplicidad
-        if Proveedor.objects.filter(nombre=nombre).exists():
+        # Validación de duplicidad, excluyendo la instancia actual si existe
+        if Proveedor.objects.filter(nombre=nombre).exclude(id=self.instance.id).exists():
             raise forms.ValidationError(f'El proveedor "{nombre}" ya existe.')
 
         return cleaned_data
@@ -140,3 +142,19 @@ class VentaForm(forms.Form):
     codigo = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control'}))
     
     cantidad = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control'}))
+
+from django import forms
+from .models import Producto
+
+class RealizarPedido(forms.Form):
+    codigo = forms.IntegerField(min_value=1, label="Código del Producto", widget=forms.NumberInput(attrs={'class': 'form-control'}))
+    cantidad = forms.IntegerField(min_value=1, label="Cantidad", widget=forms.NumberInput(attrs={'class': 'form-control'}),  error_messages={'min_value': 'La cantidad debe ser al menos 1.', })
+    
+    def clean_cantidad(self):
+        cantidad = self.cleaned_data.get('cantidad')
+        if cantidad < 1:
+            raise forms.ValidationError("La cantidad no puede ser negativa o cero.")
+        return cantidad
+
+class SeleccionarProveedorForm(forms.Form):
+    proveedor = forms.ModelChoiceField(queryset=Proveedor.objects.all(), empty_label="Seleccione un proveedor", widget=forms.Select(attrs={'class': 'form-control'}))
