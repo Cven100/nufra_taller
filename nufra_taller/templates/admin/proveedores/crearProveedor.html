@@ -5,6 +5,6 @@
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit" class= "btn btn-primary">Crear Proveedor</button>
-    <a href={% url "proveedores" %} class="btn btn-primary">Volver</a>
+    <a href="{% url "proveedores" %}" class="btn btn-primary">Volver</a>
 </form>
 {% endblock %}

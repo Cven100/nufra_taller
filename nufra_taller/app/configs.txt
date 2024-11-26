@@ -1,35 +1,240 @@
     Creacion de roles:
+insert into app_roles(nombre, disponible) values('admin', true);
+insert into app_roles(nombre, disponible) values('supervisor', true);
+insert into app_roles(nombre, disponible) values('vendedor', true);
+
+
+
+// comanda en vscode
 python manage.py shell
 
-from app.models import Roles
-
-Roles.objects.create(nombre="usuario")
-Roles.objects.create(nombre="admin")
-
-    Verificar los roles creados
-Roles.objects.all()
-
-
-    Primer admin:
-python manage.py shell
-
-from app.models import Usuario, Roles
+// insert del primer adm reemplazar credenciales a gusto
+from app.models import Empleado, Roles
 from django.contrib.auth.hashers import make_password
 
-rol_admin = Roles.objects.get(id=2)
-usuario_francisco = Usuario(
-    rut_usuario='10300100-2',
-    nombre='Francisco',
-    email='francisco@gmail.com',
-    password=make_password('1234'),
-    rol=rol_admin
+# Reemplaza los datos con los que prefieras
+admin = Empleado(
+    rut_empleado='12345678-9',
+    nombre='Miguel',
+    apellido='Acum',
+    username='admin1',
+    password=make_password('123456'),
+    correo='acum.miguel@nufra.com',
+    telefono='84207383',
+    rol=Roles.objects.get(id=1),
+    jefatura='',
 )
-usuario_francisco.save()
+admin.save()
+
+// insert masivo 10 users
+empleados = [
+    # 2 Admins
+    {'rut_empleado': '12345678-9', 'nombre': 'Admin1', 'apellido': 'Admin', 'username': 'admin1', 'rol_id': 1},
+    {'rut_empleado': '23456789-0', 'nombre': 'Admin2', 'apellido': 'Admin', 'username': 'admin2', 'rol_id': 1},
+    
+    # 3 Supervisores
+    {'rut_empleado': '34567890-1', 'nombre': 'Super1', 'apellido': 'Supervisor', 'username': 'user3', 'rol_id': 2},
+    {'rut_empleado': '45678901-2', 'nombre': 'Super2', 'apellido': 'Supervisor', 'username': 'user4', 'rol_id': 2},
+    {'rut_empleado': '56789012-3', 'nombre': 'Super3', 'apellido': 'Supervisor', 'username': 'user5', 'rol_id': 2},
+    
+    # 5 Vendedores
+    {'rut_empleado': '67890123-4', 'nombre': 'Vendedor1', 'apellido': 'Vendedor', 'username': 'user6', 'rol_id': 3},
+    {'rut_empleado': '78901234-5', 'nombre': 'Vendedor2', 'apellido': 'Vendedor', 'username': 'user7', 'rol_id': 3},
+    {'rut_empleado': '89012345-6', 'nombre': 'Vendedor3', 'apellido': 'Vendedor', 'username': 'user8', 'rol_id': 3},
+    {'rut_empleado': '90123456-7', 'nombre': 'Vendedor4', 'apellido': 'Vendedor', 'username': 'user9', 'rol_id': 3},
+    {'rut_empleado': '11223344-5', 'nombre': 'Vendedor5', 'apellido': 'Vendedor', 'username': 'user10', 'rol_id': 3},
+]
+
+# Creación de los empleados en la base de datos
+for empleado in empleados:
+    admin = Empleado(
+        rut_empleado=empleado['rut_empleado'],
+        nombre=empleado['nombre'],
+        apellido=empleado['apellido'],
+        username=empleado['username'],
+        password=make_password('1234'),
+        correo=f'{empleado["username"]}@example.com',  # Puedes personalizar el correo
+        telefono='84207383',
+        rol=Roles.objects.get(id=empleado['rol_id']),
+        jefatura='',
+    )
+    admin.save()
+// Insert masivo 10 proveedores
+from app.models import Proveedor
+
+proveedores = [
+    Proveedor(
+        nombre="Watts",
+        correo="contacto@watts.cl",
+        telefono="222222222",
+        disponible=True,
+    ),
+    Proveedor(
+        nombre="Colun",
+        correo="ventas@colun.cl",
+        telefono="333333333",
+        disponible=True,
+    ),
+    Proveedor(
+        nombre="Lays",
+        correo="servicio@lays.cl",
+        telefono="444444444",
+        disponible=True,
+    ),
+    Proveedor(
+        nombre="Coca-Cola",
+        correo="contacto@coca-cola.cl",
+        telefono="555555555",
+        disponible=True,
+    ),
+    Proveedor(
+        nombre="Nestlé",
+        correo="soporte@nestle.cl",
+        telefono="666666666",
+        disponible=True,
+    ),
+    Proveedor(
+        nombre="Unimarc",
+        correo="proveedores@unimarc.cl",
+        telefono="777777777",
+        disponible=True,
+    ),
+    Proveedor(
+        nombre="Soprole",
+        correo="atencion@soprole.cl",
+        telefono="888888888",
+        disponible=True,
+    ),
+    Proveedor(
+        nombre="PepsiCo",
+        correo="ventas@pepsico.cl",
+        telefono="999999999",
+        disponible=True,
+    ),
+    Proveedor(
+        nombre="Carozzi",
+        correo="info@carozzi.cl",
+        telefono="101010101",
+        disponible=True,
+    ),
+    Proveedor(
+        nombre="Agrosuper",
+        correo="clientes@agrosuper.cl",
+        telefono="121212121",
+        disponible=True,
+    ),
+]
+
+for proveedor in proveedores:
+    proveedor.save()
+
+
+// Insert masivo 10 categorias
+
+from app.models import CategoriaProducto
+
+categorias = [
+    CategoriaProducto(
+        nombre="Lácteos",
+        disponible=True,
+    ),
+    CategoriaProducto(
+        nombre="Bebidas",
+        disponible=True,
+    ),
+    CategoriaProducto(
+        nombre="Snacks",
+        disponible=True,
+    ),
+    CategoriaProducto(
+        nombre="Carnes",
+        disponible=True,
+    ),
+    CategoriaProducto(
+        nombre="Congelados",
+        disponible=True,
+    ),
+    CategoriaProducto(
+        nombre="Abarrotes",
+        disponible=True,
+    ),
+    CategoriaProducto(
+        nombre="Panadería",
+        disponible=True,
+    ),
+    CategoriaProducto(
+        nombre="Frutas y Verduras",
+        disponible=True,
+    ),
+    CategoriaProducto(
+        nombre="Limpieza",
+        disponible=True,
+    ),
+    CategoriaProducto(
+        nombre="Mascotas",
+        disponible=True,
+    ),
+]
+
+for categoria in categorias:
+    categoria.save()
+
+// Insert masivo 100 productos
+from app.models import Producto, Proveedor, CategoriaProducto
+import random
+
+# Obtener todas las categorías y proveedores existentes
+categorias = list(CategoriaProducto.objects.all())
+proveedores = list(Proveedor.objects.all())
+
+# Lista de nombres de productos
+nombres_productos = [
+    "Leche Entera", "Jugo de Naranja", "Galletas de Chocolate", "Carne de Vacuno", "Helado de Vainilla",
+    "Harina Integral", "Pan de Molde", "Manzanas Verdes", "Detergente Líquido", "Alimento para Perros",
+    "Yogur Natural", "Refresco de Cola", "Papas Fritas", "Pechuga de Pollo", "Camarones Congelados",
+    "Arroz Blanco", "Bizcocho de Chocolate", "Plátanos", "Limpiador Multiuso", "Arena para Gatos",
+    "Queso Gouda", "Té Negro", "Barritas de Cereal", "Costillar de Cerdo", "Verduras Mixtas Congeladas",
+    "Azúcar Blanca", "Croissant", "Peras", "Suavizante de Ropa", "Snacks para Gatos",
+    "Mantequilla", "Café Molido", "Chocolates", "Churrasco", "Hielo en Cubos",
+    "Aceite de Oliva", "Bagels", "Naranjas", "Lavaloza Líquido", "Juguetes para Perros",
+    "Crema de Leche", "Energizante", "Crackers", "Chuletas de Cerdo", "Pescado Congelado",
+    "Lentejas", "Donuts", "Uvas", "Limpiavidrios", "Premios para Mascotas",
+    "Queso Crema", "Agua Mineral", "Gomitas", "Carne Molida", "Mariscos Congelados",
+    "Fideos", "Pan Francés", "Duraznos", "Cloro", "Accesorios para Mascotas",
+    "Kéfir", "Cerveza", "Frutos Secos", "Chuletas de Cordero", "Helados de Frutas",
+    "Avena", "Empanadas", "Cerezas", "Detergente en Polvo", "Pelotas para Mascotas",
+    "Leche Descremada", "Vino Tinto", "Tortas", "Lomo Vetado", "Croquetas de Papa",
+    "Quinua", "Panes Dulces", "Frutillas", "Limpiador de Cocina", "Rascadores para Gatos",
+    "Leche Sin Lactosa", "Sidra", "Galletas Integrales", "Asado de Tira", "Empanadas Congeladas",
+    "Harina de Avena", "Bagels Integrales", "Arándanos", "Desinfectante", "Camas para Perros",
+    "Queso Parmesano", "Bebida Deportiva", "Chocolates Rellenos", "Corte de Filete", "Pizza Congelada",
+]
+
+# Crear 100 productos
+for i in range(100):
+    producto = Producto(
+        nombre=nombres_productos[i],
+        categoria=random.choice(categorias),
+        descripcion=f"Producto de alta calidad: {nombres_productos[i]}",
+        proveedor=random.choice(proveedores),
+        precio_venta=random.randint(1000, 20000),  # Precio de venta como entero
+        precio_compra=random.randint(500, 15000),  # Precio de compra como entero
+        disponible=True,
+        stock=random.randint(1, 500),
+    )
+    producto.save()
+
+print("100 productos creados exitosamente con precios enteros.")
 
 
 -- EN CASO DE QUERE REINICIAR UNA TABLA
-SET FOREIGN_KEY_CHECKS = 0;  -- Deshabilitar las restricciones
-TRUNCATE TABLE nombre_tabla;  -- Truncar la tabla
-SET FOREIGN_KEY_CHECKS = 1;  -- Habilitar restricciones
+-- Deshabilitar las restricciones
+    SET FOREIGN_KEY_CHECKS = 0;
+-- Truncar la tabla
+TRUNCATE TABLE nombre_tabla;
+-- Habilitar restricciones
+SET FOREIGN_KEY_CHECKS = 1;
+
+
 
 style="background-color: #4A4063; color: white;"

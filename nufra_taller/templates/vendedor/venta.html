@@ -1,11 +1,11 @@
 {% extends 'shared/base.html' %}
 
 {% block content %}
-<div class="container mt-4"style="background-color: #4A4063; padding: 20px;">
+<div class="container mt-4" style="background-color: #4A4063; padding: 20px;">
     <div class="row">
         <!-- Columna de la izquierda para el formulario -->
         <div class="col-md-4">
-            <div class="card shadow-sm">
+            <div class="card shadow-sm"style="background-color: #bbbbbb; color: dddddd;">
                 <div class="card-header text-center">
                     <h5>Agregar Producto</h5>
                 </div>
@@ -21,7 +21,7 @@
 
         <!-- Columna de la derecha para mostrar el carrito -->
         <div class="col-md-8">
-            <div class="card shadow-sm">
+            <div class="card shadow-sm"style="background-color: #bbbbbb; color: dddddd;">
                 <div class="card-header">
                     <h5>Lo atiende {{ empleado }}</h5>
                     <div class="d-flex justify-content-between align-items-center">
@@ -46,7 +46,11 @@
                                 <th>Precio Unitario</th>
                                 <th>Cantidad</th>
                                 <th>Subtotal</th>
+                                {% if rol_id == "1" or rol_id == "2" %}
                                 <th>Acción</th>
+                                {% endif %}
+                                <a href="{% url 'login' %}" class="btn btn-custom"><i class="fa-solid fa-user-shield"></i></a>
+
                             </tr>
                         </thead>
                         <tbody>
@@ -57,15 +61,14 @@
                                 <td>${{ producto.precio_unitario }}</td>
                                 <td>{{ producto.cantidad }}</td>
                                 <td>${{ producto.subtotal }}</td>
+                                {% if rol_id == "1" or rol_id == "2" %}
                                 <td>
-                                    {% if rol_id == "1" or rol_id == "2" %}
-                                    <!-- Mostrar la acción de quitar producto -->
                                     <form method="POST" action="{% url 'quitarProductoCarrito' producto.codigo %}">
                                         {% csrf_token %}
-                                        <button type="submit" class="btn btn-danger btn-sm">Quitar</button>
+                                        <button type="submit" class="btn btn-deshabilitar btn-sm"><i class="fa-solid fa-trash"></i></button>
                                     </form>
-                                {% endif %}
                                 </td>
+                                {% endif %}
                             </tr>
                             {% empty %}
                             <tr>
@@ -74,9 +77,6 @@
                             {% endfor %}
                         </tbody>
                     </table>
-
-                    <!-- Total y Confirmación -->
-
                 </div>
             </div>
         </div>

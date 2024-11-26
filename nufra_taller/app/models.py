@@ -66,7 +66,7 @@ class Producto(models.Model):
     precio_venta = models.FloatField() 
     precio_compra = models.FloatField() 
     disponible = models.BooleanField(default=True)
-    imagen = models.ImageField(upload_to='producto/', null=True, blank=True)
+    imagen = models.ImageField(upload_to='media/producto/', null=True, blank=True)
     stock = models.IntegerField(default=0)
 
 
@@ -110,10 +110,16 @@ class DetalleVenta(models.Model):
 
 
 class Pedido(models.Model):
+    estado_choices = [
+        ('pendiente', 'Pendiente'),
+        ('confirmado', 'Confirmado'),
+        ('cancelado', 'Cancelado'),
+    ]
     nro_pedido = models.AutoField(unique=True, primary_key=True)
     fecha = models.DateField(auto_now_add=True)
     proveedor = models.ForeignKey(Proveedor, on_delete=models.DO_NOTHING)
     total_pedido = models.FloatField()
+    estado = models.CharField(max_length=20, choices=estado_choices, default="pendiente")
 
 
 class DetallePedido(models.Model):
@@ -123,3 +129,20 @@ class DetallePedido(models.Model):
     precio_unitario = models.FloatField()
     subtotal = models.FloatField()
 
+
+class Merma(models.Model):
+    fecha = models.DateField(auto_now_add=True)
+    descripcion = models.CharField(max_length=255)
+    total_merma = models.FloatField(default=0.0)  # Para calcular el total de la merma
+
+    def __str__(self):
+        return f"Merma #{self.id} - {self.descripcion} - {self.fecha}"
+
+class DetalleMerma(models.Model):
+    merma = models.ForeignKey(Merma, related_name='detalles', on_delete=models.CASCADE)
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    cantidad = models.PositiveIntegerField()  # Cantidad de producto perdido o dañado
+    razon = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f"{self.producto.nombre} - {self.cantidad} unidades"

@@ -13,11 +13,11 @@
         <h3 class="text-center mb-4 text-white">Ingreso</h3>
         <form method="POST">
             {% csrf_token %}
-            <div class="mb-3">
-                {{ form.username.label_tag }}  
-                {{ form.username }}
-            </div>
-            <div class="mb-3">
+            <div class="mb-3" style= "color: white;">
+            {{ form.username.label_tag }}  
+            {{ form.username }}
+        </div>
+            <div class="mb-3"style= "color: white;">
                 {{ form.password.label_tag }}
                 {{ form.password }}
             </div>

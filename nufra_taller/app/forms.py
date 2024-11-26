@@ -29,15 +29,40 @@ class RegisterForm(forms.ModelForm):
             'correo': forms.EmailInput(attrs={'class': 'form-control'}),
             'rol': forms.Select(attrs={'class': 'form-control'}),
         }
-    def clean(self):
-        cleaned_data = super().clean()
-        rut_empleado = cleaned_data.get('rut_empleado')
 
-        # Validación de duplicidad
-        if Empleado.objects.filter(rut_empleado=rut_empleado).exists():
-            raise forms.ValidationError(f'un empleado con el rut "{rut_empleado}" ya existe.')
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Hacer el campo password opcional si ya existe un objeto en el formulario (es decir, cuando se está editando)
+        if self.instance and self.instance.pk:
+            self.fields['rut_empleado'].disabled = True
+            self.fields['password'].required = False  # La contraseña no es obligatoria si estamos editando
+   
+    # def clean(self):
+    #     cleaned_data = super().clean()
+    #     password = cleaned_data.get('password')    
+    # def clean(self):
+    #     cleaned_data = super().clean()
+    #     rut_empleado = cleaned_data.get('rut_empleado')
 
-        return cleaned_data
+    #     # Validación de duplicidad
+    #     if self.instance.pk:
+    #         # Solo validamos si el rut_empleado está en otro registro con pk diferente
+    #         if Empleado.objects.filter(rut_empleado=rut_empleado).exclude(pk=self.instance.pk).exists():
+    #             raise forms.ValidationError(f'un empleado con el rut "{rut_empleado}" ya existe.')
+    #     else:
+    #         # Si estamos creando un nuevo objeto, validamos si ya existe en la base de datos
+    #         if Empleado.objects.filter(rut_empleado=rut_empleado).exists():
+    #             raise forms.ValidationError(f'un empleado con el rut "{rut_empleado}" ya existe.')
+
+    #     # Validación de la contraseña
+        # password = cleaned_data.get('password')
+        # if password:  # Si hay una nueva contraseña
+        # cleaned_data['password'] = make_random_password()  # Aseguramos que la contraseña sea cifrada
+        # if not password and self.instance and self.instance.pk:
+        #     # Si no se ha proporcionado una nueva contraseña, no hacer nada con la contraseña actual
+        #     cleaned_data['password'] = self.instance.password  # Mantener la contraseña existente
+
+    #     return cleaned_data
         
 #   LOGIN
 class LoginForm(forms.Form):
@@ -82,8 +107,8 @@ class CategoriaProductoForm(forms.ModelForm):
         nombre = cleaned_data.get('nombre')
 
         # Validación de duplicidad
-        if CategoriaProducto.objects.filter(nombre=nombre).exists():
-            raise forms.ValidationError(f'la categoria "{nombre}" ya existe.')
+        if CategoriaProducto.objects.filter(nombre=nombre).exclude(id=self.instance.id).exists():
+            raise forms.ValidationError(f'La categoria "{nombre}" ya existe.')
 
         return cleaned_data
     
@@ -114,7 +139,7 @@ class ProductoForm(forms.ModelForm):
         nombre = cleaned_data.get('nombre')
 
         # Validación de duplicidad
-        if Producto.objects.filter(nombre=nombre).exists():
+        if Producto.objects.filter(nombre=nombre).exclude(codigo=self.instance.codigo).exists():
             raise forms.ValidationError(f'el producto "{nombre}" ya existe.')
 
         return cleaned_data
@@ -143,9 +168,6 @@ class VentaForm(forms.Form):
     
     cantidad = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control'}))
 
-from django import forms
-from .models import Producto
-
 class RealizarPedido(forms.Form):
     codigo = forms.IntegerField(min_value=1, label="Código del Producto", widget=forms.NumberInput(attrs={'class': 'form-control'}))
     cantidad = forms.IntegerField(min_value=1, label="Cantidad", widget=forms.NumberInput(attrs={'class': 'form-control'}),  error_messages={'min_value': 'La cantidad debe ser al menos 1.', })
@@ -158,3 +180,5 @@ class RealizarPedido(forms.Form):
 
 class SeleccionarProveedorForm(forms.Form):
     proveedor = forms.ModelChoiceField(queryset=Proveedor.objects.all(), empty_label="Seleccione un proveedor", widget=forms.Select(attrs={'class': 'form-control'}))
+
+

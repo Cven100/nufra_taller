@@ -12,7 +12,7 @@
                     </h4>
                 </div>
                 <div class="card-body">
-                    <form method="POST">
+                    <form method="POST" enctype="multipart/form-data">  <!-- Agregar enctype aquí -->
                         {% csrf_token %}                    
                         <div class="mb-3 text-white">
                             {{ form.as_p }}
@@ -20,7 +20,7 @@
                         <button type="submit" class="btn btn-custom w-100 mb-3">
                             {% if producto %}Guardar Cambios{% else %}Crear Producto{% endif %}
                         </button>
-                    </form>
+                    </form>                                    
                     <a href="{% url 'adminHome' %}" class="btn btn-outline-light w-100">Volver</a>
                 </div>
             </div>
@@ -41,53 +41,55 @@
                     </div>
                 </form>
             </div>
-            <table class="table table-bordered table-striped mt-3">
-                <thead>
-                    <tr>
-                        <th>Código</th>
-                        <th>Nombre</th>
-                        <th>Categoría</th>
-                        <th>Proveedor</th>
-                        <th>P.Venta</th>
-                        <th>P.Compra</th>
-                        <th>Stock</th>
-                        <th>Disponible</th>
-                        <th>Acción</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for producto in productos %}
+            <div class="table-responsive mt-3">
+                <table class="table table-bordered table-striped">
+                    <thead>
                         <tr>
-                            <td>{{ producto.codigo }}</td>
-                            <td>{{ producto.nombre }}</td>
-                            <td>{{ producto.categoria.nombre }}</td>
-                            <td>{{ producto.proveedor.nombre }}</td>
-                            <td>${{ producto.precio_venta }}</td>
-                            <td>${{ producto.precio_compra }}</td>
-                            <td>{{ producto.stock }}</td>
-                            <td>
-                                {% if producto.disponible %}
-                                    <span class="badge bg-success">Sí</span>
-                                {% else %}
-                                    <span class="badge bg-danger">No</span>
-                                {% endif %}
-                            </td>
-                            <td>
-                                <a href="{% url 'editarProducto' producto.codigo %}" class="btn-custom">Editar</a>
-                                {% if producto.disponible %}
-                                <a href="{% url 'deshabilitarProducto' producto.codigo %}" class="btn btn-danger btn-sm">Deshabilitar</a>
-                                {% else %}
-                                <a href="{% url 'deshabilitarProducto' producto.codigo %}" class="btn btn-success btn-sm">Habilitar</a>
-                                {% endif %}
-                            </td>
+                            <th>Código</th>
+                            <th>Nombre</th>
+                            <th>Categoría</th>
+                            <th>Proveedor</th>
+                            <th>P.Venta</th>
+                            <th>P.Compra</th>
+                            <th>Stock</th>
+                            <th>Disp</th>
+                            <th>Acción</th>
                         </tr>
-                    {% empty %}
-                        <tr>
-                            <td colspan="8" class="text-center">No se encontraron productos.</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {% for producto in productos %}
+                            <tr>
+                                <td>{{ producto.codigo }}</td>
+                                <td>{{ producto.nombre }}</td>
+                                <td>{{ producto.categoria.nombre }}</td>
+                                <td>{{ producto.proveedor.nombre }}</td>
+                                <td>${{ producto.precio_venta }}</td>
+                                <td>${{ producto.precio_compra }}</td>
+                                <td>{{ producto.stock }}</td>
+                                <td>
+                                    {% if producto.disponible %}
+                                        Si
+                                    {% else %}
+                                        No
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{% url 'editarProducto' producto.codigo %}" class="btn btn-custom btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
+                                    {% if producto.disponible %}
+                                    <a href="{% url 'deshabilitarProducto' producto.codigo %}" class="btn btn-deshabilitar btn-sm"><i class="fa-solid fa-ban"></i></a>
+                                    {% else %}
+                                    <a href="{% url 'deshabilitarProducto' producto.codigo %}" class="btn btn-habilitar btn-sm"><i class="fa-solid fa-check"></i></a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="9" class="text-center">No se encontraron productos.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>            
         </div>
     </div>
 </div>

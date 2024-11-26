@@ -12,7 +12,7 @@
                 <button type="submit" class="btn btn-custom w-100 ">
                     {% if proveedor %}Guardar Cambios{% else %}Crear Proveedor{% endif %}
                 </button>
-                <a href="{% url 'adminHome' %}" class="btn btn-secondary w-100 mt-2">Volver</a>
+                <a href="{% url 'adminHome' %}" class="btn btn-custom w-100 mt-2">Volver</a>
             </form>
         </div>
 
@@ -37,20 +37,20 @@
                         <td>{{ proveedor.telefono }}</td>
                         <td>
                             {% if proveedor.disponible %}
-                                <span class="badge bg-success">Activo</span>
+                                Activo
                             {% else %}
-                                <span class="badge bg-secondary">Inactivo</span>
+                                Inactivo
                             {% endif %}
                         </td>
                         <td>
                             <!-- Botones para editar y deshabilitar -->
-                            <a href="{% url 'editarProveedor' proveedor.id %}" class="btn-custom">Editar</a>
-                            <a href="{% url 'crearPedido' proveedor.id %}" class="btn-custom">Crear Pedido</a>
+                            <a href="{% url 'editarProveedor' proveedor.id %}" class="btn btn-custom btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
                             {% if proveedor.disponible %}
-                            <a href="{% url 'deshabilitarProveedor' proveedor.id %}" class="btn btn-danger btn-sm">Deshabilitar</a>
+                            <a href="{% url 'deshabilitarProveedor' proveedor.id %}" class="btn btn-deshabilitar btn-sm"><i class="fa-solid fa-ban"></i></a>
                             {% else %}
-                            <a href="{% url 'deshabilitarProveedor' proveedor.id %}" class="btn btn-success btn-sm">Habilitar</a>
+                            <a href="{% url 'deshabilitarProveedor' proveedor.id %}" class="btn btn-habilitar btn-sm"><i class="fa-solid fa-check"></i></a>
                             {% endif %}
+                            <a href="{% url 'crearPedido' proveedor.id %}" class="btn-custom">Crear Pedido</a>
                         </td>
                     </tr>
                     {% empty %}
